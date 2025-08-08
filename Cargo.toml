@@ -1,13 +1,25 @@
 [package]
 name = "rust_dll"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+description = "A short description of my package"
+documentation = "https://docs.rs/bitflags"
+homepage = "https://serde.rs"
+license-file = "LICENSE.txt"
+repository = "https://github.com/rust-lang/cargo"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-chrono = "0.4.35"
+chrono = "0.4.41"
 encoding_rs = "0.8"
 
 [lib]
 crate-type = ["cdylib"]
+
+[profile.release]
+opt-level = "z"
+lto = "thin"           # LTO with optimization for smaller size and faster compilation time
+panic = "abort"        # Makes the binary more lightweight by avoiding the panic stack
+debug = false          # Disables debug information
+codegen-units = 1      # Reduz o número de unidades de código para otimizar mais

@@ -1,0 +1,11 @@
+# https://doc.rust-lang.org/cargo/reference/config.html 
+
+[build]
+jobs = 1                                # number of parallel jobs, defaults to # of CPUs
+target = "i686-pc-windows-msvc"         # build for the target triple (ignored by `cargo install`)
+rustflags = "-C target-cpu=native"      # custom flags to pass to all compiler invocations
+
+
+[term]
+verbose = false                         # whether cargo provides verbose output
+unicode = true                          # whether cargo can render output using non-ASCII unicode characters

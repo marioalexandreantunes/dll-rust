@@ -1,23 +1,34 @@
-; Autoit x86
-Local $hDLL = DllOpen("target\i686-pc-windows-msvc\debug\rust_dll.dll")
+; Autoit x86 - Versão com gestão correta de memória
+Global $hDLL = DllOpen("target\i686-pc-windows-msvc\release\rust_dll.dll")
 
-Local $aCall_dll = DllCall($hDLL, "STR", "developer")
-If UBound($aCall_dll) <> 0 Then
-	ConsoleWrite($aCall_dll[0] & @CRLF)
+; Função developer
+Global $aCall_dll = DllCall($hDLL, "ptr", "developer")
+If UBound($aCall_dll) <> 0 And $aCall_dll[0] <> 0 Then
+    Global $devString = DllStructGetData(DllStructCreate("char[256]", $aCall_dll[0]), 1)
+    ConsoleWrite($devString & @CRLF)
+    ; Liberar memória
+    DllCall($hDLL, "none", "free_string", "ptr", $aCall_dll[0])
 EndIf
 
-$aCall_dll = DllCall($hDLL, "STR", "date")
-If UBound($aCall_dll) <> 0 Then
-	ConsoleWrite($aCall_dll[0] & @CRLF)
+; Função date
+$aCall_dll = DllCall($hDLL, "ptr", "date")
+If UBound($aCall_dll) <> 0 And $aCall_dll[0] <> 0 Then
+    Global $dateString = DllStructGetData(DllStructCreate("char[256]", $aCall_dll[0]), 1)
+    ConsoleWrite($dateString & @CRLF)
+    ; Liberar memória
+    DllCall($hDLL, "none", "free_string", "ptr", $aCall_dll[0])
 EndIf
 
-Local $sUm = "Olá"
-Local $sDois = "Mundo"
+; Função concatenate
+Global $sUm = "Olá"
+Global $sDois = "Mundo"
 
-$aCall_dll = DllCall($hDLL, "STR", "concatenate", "STR", $sUm, "STR", $sDois)
-If UBound($aCall_dll) <> 0 Then
-	ConsoleWrite($aCall_dll[0] & @CRLF)
+$aCall_dll = DllCall($hDLL, "ptr", "concatenate", "str", $sUm, "str", $sDois)
+If UBound($aCall_dll) <> 0 And $aCall_dll[0] <> 0 Then
+    Global $concatString = DllStructGetData(DllStructCreate("char[512]", $aCall_dll[0]), 1)
+    ConsoleWrite($concatString & @CRLF)
+    ; Liberar memória
+    DllCall($hDLL, "none", "free_string", "ptr", $aCall_dll[0])
 EndIf
 
 DllClose($hDLL)
-
